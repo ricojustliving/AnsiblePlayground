@@ -1,0 +1,37 @@
+--- 
+- name: My first playbook
+  hosts: targets 
+  become: true
+
+  tasks: 
+    - name: Install useful tools
+      apt: 
+        name: [htop, curl, tree]
+        state: present
+        update_cache: true
+
+    - name: Set the login banner 
+      copy: 
+        dest: /etc/motd
+        content: "Managed by Ansible - Ricos  lab" 
+
+    - name: Install nginx web server
+      apt: 
+        name: nginx
+        state: present
+
+    - name: Make sure nginx is running and starts on boot
+      service: 
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: Create user analyst
+      ansible.builtin.user:
+        name: analyst
+        group: sudo
+        create_home: true
+        state: absent
+        remove: true
+
+
